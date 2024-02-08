@@ -41,7 +41,7 @@ class JsonSaver(Saver):
             sorted_data = sorted(data, key=lambda d: d['salary'][0], reverse=True)
             json.dump(sorted_data, file, indent=4, ensure_ascii=False)
 
-    def get_top_vacancies_by_name(self, key_words, top_n):
+    def get_top_vacancies_by_name(self, key_words: list, top_n):
         """
         Возвращает N вакансий, в которых есть хотя бы одно из заданных ключевых слов
         :param key_words:
@@ -52,11 +52,17 @@ class JsonSaver(Saver):
         with open(self.file, "r") as file:
             data = json.load(file)
             for vacancy in data:
-                for word in key_words:
-                    if word.lower() in vacancy["name"].lower() or word.lower() in vacancy["responsibility"].lower():
-                        list_to_return.append(vacancy)
-                        break
-                if len(list_to_return) == 5:
+                if len(key_words) == 0:
+                    list_to_return.append(vacancy)
+                else:
+                    for word in key_words:
+                        try:
+                            if word.lower() in (vacancy["name"].lower() + "" + vacancy["responsibility"].lower()):
+                                list_to_return.append(vacancy)
+                                break
+                        except AttributeError:
+                            break
+                if len(list_to_return) == top_n:
                     break
         return list_to_return
 
