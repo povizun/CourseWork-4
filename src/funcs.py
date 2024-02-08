@@ -8,7 +8,7 @@ def user_interaction():
     asa = SuperJobAPI(search_query)
     vacancies_hh = sas.get_vacancies()
     vacancies_sj = asa.get_vacancies()
-    json_saver = JsonSaver("/try")
+    json_saver = JsonSaver("/vacancy_list")
     json_saver.add_vacancies(vacancies_hh)
     json_saver.add_vacancies(vacancies_sj)
     top_n = int(input("Введите количество вакансий для вывода в топ N: "))
